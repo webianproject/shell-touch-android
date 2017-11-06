@@ -39,7 +39,8 @@ public class HomeActivity extends Activity {
         browser.setWebViewClient(new WebViewClient());
         browser.getSettings().setJavaScriptEnabled(true);
         browser.getSettings().setDomStorageEnabled(true);
-        browser.loadUrl("http://mozfest.mozilla-iot.org");
+        browser.setInitialScale(100);
+        browser.loadUrl("http://duckduckgo.com");
     }
 
     @Override
