@@ -15,10 +15,10 @@
         android:layout_width="match_parent"
         android:layout_height="18dp"
         android:orientation="horizontal"
-        android:background="#000000">
+        android:background="#5d5d5d">
 
         <TextView
-            android:id="@+id/Title"
+            android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -26,6 +26,7 @@
             android:paddingRight="5dp"
             android:text=""
             android:textColor="@android:color/white"
+            android:gravity="center_vertical|left"
             android:textSize="10sp" />
 
         <TextClock
@@ -36,7 +37,6 @@
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:textColor="@android:color/white"
-            android:text=""
             android:textSize="10sp" />
 
     </LinearLayout>
@@ -49,4 +49,22 @@
 
     </WebView>
 
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/system_toolbar"
+        android:layout_width="fill_parent"
+        android:layout_height="24dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="#000000">
+
+        <ImageButton
+            android:id="@+id/home_button"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_centerInParent="true"
+            android:background="@android:color/transparent"
+            android:src="@drawable/home_button"
+            android:onClick="home" />
+
+    </LinearLayout>
 </LinearLayout>
