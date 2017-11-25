@@ -12,7 +12,7 @@ import android.webkit.WebViewClient;
 public class HomeActivity extends Activity {
 
     private View mContentView;
-    private WebView browser;
+    private WebView webview;
     private static final String HOME_PAGE = "https://duckduckgo.com";
 
     @Override
@@ -21,12 +21,39 @@ public class HomeActivity extends Activity {
         setContentView(R.layout.activity_home);
 
         mContentView = findViewById(R.id.home_content);
-        browser = findViewById(R.id.webview);
-        browser.setWebViewClient(new WebViewClient());
-        browser.getSettings().setJavaScriptEnabled(true);
-        browser.getSettings().setDomStorageEnabled(true);
-        browser.setInitialScale(100);
-        browser.loadUrl(HOME_PAGE);
+        webview = findViewById(R.id.webview);
+        webview.setWebViewClient(new WebViewClient());
+        webview.getSettings().setJavaScriptEnabled(true);
+        webview.getSettings().setDomStorageEnabled(true);
+        webview.setInitialScale(100);
+        webview.loadUrl(HOME_PAGE);
+    }
+
+    /**
+     * Navigate to the home page.
+     *
+     * @param view
+     */
+    public void home(View view) {
+        webview.loadUrl(HOME_PAGE);
+    }
+
+    /**
+     * Navigate back in session history.
+     *
+     * @param view
+     */
+    public void back(View view) {
+        webview.goBack();
+    }
+
+    /**
+     * Reload the current page.
+     *
+     * @param view
+     */
+    public void reload(View view) {
+        webview.reload();
     }
 
     @Override
@@ -40,9 +67,5 @@ public class HomeActivity extends Activity {
                             | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                             | View.SYSTEM_UI_FLAG_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);}
-    }
-
-    public void home(View view) {
-        browser.loadUrl(HOME_PAGE);
     }
 }
