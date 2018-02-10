@@ -1,5 +1,6 @@
 package org.webian.shelltouch;
 
+import java.io.IOException;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +15,7 @@ public class HomeActivity extends Activity {
     private View mContentView;
     private WebView webview;
     private static final String HOME_PAGE = "https://duckduckgo.com";
+    private ShellServer server;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +29,22 @@ public class HomeActivity extends Activity {
         webview.getSettings().setDomStorageEnabled(true);
         webview.setInitialScale(100);
         webview.loadUrl(HOME_PAGE);
+    }
+
+    public void onResume() {
+        super.onResume();
+        try {
+            server = new ShellServer();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void onPause() {
+        super.onPause();
+        if(server != null) {
+            server.stop();
+        }
     }
 
     /**
