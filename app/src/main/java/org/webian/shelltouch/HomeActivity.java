@@ -1,11 +1,12 @@
 package org.webian.shelltouch;
 
-import java.io.IOException;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import java.io.IOException;
 
 /**
  * Webian Shell Touch.
@@ -36,12 +37,25 @@ public class HomeActivity extends Activity {
         try {
             server = new ShellServer();
         } catch (IOException e) {
+            System.out.println("Failed to instantiate ShellServer");
+        }
+        try {
+            server.start();
+        } catch (IOException e) {
+            System.out.println("ShellServer failed to start");
             e.printStackTrace();
         }
     }
 
     public void onPause() {
         super.onPause();
+        if(server != null) {
+            server.stop();
+        }
+    }
+
+    public void onDestroy() {
+        super.onDestroy();
         if(server != null) {
             server.stop();
         }

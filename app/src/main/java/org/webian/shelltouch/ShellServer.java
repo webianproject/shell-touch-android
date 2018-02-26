@@ -1,25 +1,26 @@
 package org.webian.shelltouch;
 
 import java.io.IOException;
-import fi.iki.elonen.NanoHTTPD;
+
+import fi.iki.elonen.router.RouterNanoHTTPD;
 
 /**
  * Shell Server.
  *
  * Serves system services.
  */
-public class ShellServer extends NanoHTTPD {
+public class ShellServer extends RouterNanoHTTPD {
     private final static int PORT = 8080;
 
     public ShellServer() throws IOException {
         super(PORT);
-        start();
-        System.out.println("Shell server running on http://localhost:8080");
+        addMappings();
+        System.out.println("Shell server running on http://localhost:" + PORT + "/ \n");
     }
 
     @Override
-    public Response serve(IHTTPSession session) {
-        String msg = "<html><body><h1>Webian Shell</h1></body></html>\n";
-        return newFixedLengthResponse(msg);
+    public void addMappings() {
+        super.addMappings();
     }
 }
+
