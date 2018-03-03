@@ -1,6 +1,7 @@
 package org.webian.shelltouch;
 
 import android.app.Activity;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
@@ -15,7 +16,7 @@ public class HomeActivity extends Activity {
 
     private View mContentView;
     private WebView webview;
-    private static final String HOME_PAGE = "https://duckduckgo.com";
+    private static final String HOME_PAGE = "http://localhost:8080/home/";
     private ShellServer server;
 
     @Override
@@ -33,9 +34,10 @@ public class HomeActivity extends Activity {
     }
 
     public void onResume() {
+        AssetManager assetManager = getAssets();
         super.onResume();
         try {
-            server = new ShellServer();
+            server = new ShellServer(assetManager);
         } catch (IOException e) {
             System.out.println("Failed to instantiate ShellServer");
         }
