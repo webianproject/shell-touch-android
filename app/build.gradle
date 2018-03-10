@@ -16,6 +16,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    // ...
+    // workaround for "duplicate files during packaging of APK" issue
+    // see https://groups.google.com/d/msg/adt-dev/bl5Rc4Szpzg/wC8cylTWuIEJ
+    packagingOptions {
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+    }
 }
 
 dependencies {
@@ -25,6 +33,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     compileOnly 'com.google.android.things:androidthings:+'
-    compile([group: 'org.nanohttpd', name: 'nanohttpd', version: '2.3.1'])
-    compile([group: 'org.nanohttpd', name: 'nanohttpd-nanolets', version: '2.3.1'])
+    compile 'com.couchbase.lite:couchbase-lite-android:1.4.1'
 }

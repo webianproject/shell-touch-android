@@ -1,29 +1,31 @@
 package org.webian.shelltouch;
 
 import android.app.Activity;
-import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Webian Shell Touch.
  */
 public class HomeActivity extends Activity {
 
+    private ShellDatabase database;
     private View mContentView;
     private WebView webview;
-    private static final String HOME_PAGE = "http://localhost:8080/home/";
-    private ShellServer server;
+    private static final String HOME_PAGE = "https://duckduckgo.com";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
+        database = new ShellDatabase(getApplicationContext());
+        ArrayList apps = database.getApps();
+        System.out.println("Apps: " + apps);
         mContentView = findViewById(R.id.home_content);
         webview = findViewById(R.id.webview);
         webview.setWebViewClient(new WebViewClient());
@@ -31,36 +33,6 @@ public class HomeActivity extends Activity {
         webview.getSettings().setDomStorageEnabled(true);
         webview.setInitialScale(100);
         webview.loadUrl(HOME_PAGE);
-    }
-
-    public void onResume() {
-        AssetManager assetManager = getAssets();
-        super.onResume();
-        try {
-            server = new ShellServer(assetManager);
-        } catch (IOException e) {
-            System.out.println("Failed to instantiate ShellServer");
-        }
-        try {
-            server.start();
-        } catch (IOException e) {
-            System.out.println("ShellServer failed to start");
-            e.printStackTrace();
-        }
-    }
-
-    public void onPause() {
-        super.onPause();
-        if(server != null) {
-            server.stop();
-        }
-    }
-
-    public void onDestroy() {
-        super.onDestroy();
-        if(server != null) {
-            server.stop();
-        }
     }
 
     /**
