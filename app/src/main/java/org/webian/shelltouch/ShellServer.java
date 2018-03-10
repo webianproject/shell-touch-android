@@ -1,8 +1,10 @@
 package org.webian.shelltouch;
 
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.webkit.MimeTypeMap;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
@@ -18,10 +20,15 @@ import fi.iki.elonen.router.RouterNanoHTTPD;
 public class ShellServer extends RouterNanoHTTPD {
     private final static int PORT = 8080;
     private static AssetManager assetManager;
+    private static Context context;
+    private static ShellDatabase database;
 
-    public ShellServer(AssetManager assetManager) throws IOException {
+    public ShellServer(Context context) throws IOException {
         super(PORT);
-        this.assetManager = assetManager;
+        this.context = context;
+        this.assetManager = this.context.getAssets();
+        this.database = new ShellDatabase(this.context);
+
         addMappings();
         System.out.println("Shell server running on http://localhost:" + PORT + "/ \n");
     }
@@ -81,12 +88,46 @@ public class ShellServer extends RouterNanoHTTPD {
     }
 
     /**
+     * App Service returns a collection of app manifests in JSON.
+     */
+    public static class AppService extends DefaultHandler {
+
+        @Override
+        public String getText() {
+            database.getApps();
+            return "apps";
+        }
+
+        @Override
+        public String getMimeType() {
+            return "application/json";
+        }
+
+        @Override
+        public NanoHTTPD.Response.IStatus getStatus() {
+            return NanoHTTPD.Response.Status.OK;
+        }
+
+        /**
+         * Respond to GET requests.
+         */
+        @Override
+        public Response get(UriResource uriResource, Map<String, String> urlParams, IHTTPSession session) {
+            String text = getText();
+            ByteArrayInputStream input = new ByteArrayInputStream(text.getBytes());
+            int size = text.getBytes().length;
+            return NanoHTTPD.newFixedLengthResponse(getStatus(), getMimeType(), input, size);
+        }
+    }
+
+    /**
      * Add routes to router.
      */
     @Override
     public void addMappings() {
         super.addMappings();
         addRoute("/home(.?)+", HomeScreenHandler.class);
+        addRoute("/apps", AppService.class);
     }
 }
 
