@@ -18,10 +18,7 @@ public class HomeActivity extends Activity {
 
     private ShellDatabase database;
     private View mContentView;
-    private GeckoView geckoview;
-    private GeckoSession session;
-    private static GeckoRuntime runtime;
-    private static final String HOME_PAGE = "https://duckduckgo.com";
+    private HomeScreenWindow homeScreenWindow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,44 +28,7 @@ public class HomeActivity extends Activity {
         ArrayList apps = database.getApps();
         System.out.println("Apps: " + apps);
         mContentView = findViewById(R.id.home_content);
-
-        // Find the GeckoView in our layout
-        geckoview = (GeckoView) findViewById(R.id.geckoview);
-
-        if (runtime == null) {
-            final GeckoRuntimeSettings.Builder runtimeSettingsBuilder =
-                    new GeckoRuntimeSettings.Builder();
-
-            if (BuildConfig.DEBUG) {
-                // In debug builds, we want to load JavaScript resources fresh with
-                // each build.
-                runtimeSettingsBuilder.arguments(new String[] { "-purgecaches" });
-            }
-
-            final Bundle extras = getIntent().getExtras();
-            if (extras != null) {
-                runtimeSettingsBuilder.extras(extras);
-            }
-            runtimeSettingsBuilder
-                    .useContentProcessHint(false)
-                    .remoteDebuggingEnabled(true)
-                    .nativeCrashReportingEnabled(true)
-                    .javaCrashReportingEnabled(true)
-                    .crashReportingJobId(1024)
-                    .consoleOutput(true)
-                    .displayDensityOverride(1)
-                    .trackingProtectionCategories(GeckoSession.TrackingProtectionDelegate.CATEGORY_ALL);
-
-            runtime = GeckoRuntime.create(this, runtimeSettingsBuilder.build());
-        }
-
-        // Attach the GeckoView to a new GeckoSession
-        session = new GeckoSession();
-        session.open(runtime);
-        geckoview.setSession(session);
-
-        // Load a URL
-        session.loadUri(HOME_PAGE);
+        homeScreenWindow = (HomeScreenWindow) getFragmentManager().findFragmentById(R.id.homescreen_window);
     }
 
     /**
@@ -77,7 +37,7 @@ public class HomeActivity extends Activity {
      * @param view
      */
     public void home(View view) {
-        session.loadUri(HOME_PAGE);
+      homeScreenWindow.goHome();
     }
 
     /**
@@ -86,7 +46,7 @@ public class HomeActivity extends Activity {
      * @param view
      */
     public void back(View view) {
-        session.goBack();
+        homeScreenWindow.goBack();
     }
 
     /**
@@ -95,7 +55,7 @@ public class HomeActivity extends Activity {
      * @param view
      */
     public void reload(View view) {
-        session.reload();
+        homeScreenWindow.reload();
     }
 
     @Override
