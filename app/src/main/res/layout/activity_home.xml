@@ -41,11 +41,12 @@
 
     </LinearLayout>
 
-    <org.mozilla.geckoview.GeckoView
-        android:id="@+id/geckoview"
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        class="org.webian.shelltouch.HomeScreenWindow"
+        android:id="@+id/homescreen_window"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:layout_height="0dp" />
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/system_toolbar"
