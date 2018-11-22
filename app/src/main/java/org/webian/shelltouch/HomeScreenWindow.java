@@ -41,39 +41,17 @@ public class HomeScreenWindow extends Fragment {
         // Find the GeckoView in our layout
         geckoview = (GeckoView) view.findViewById(R.id.geckoview);
 
-        if (runtime == null) {
-            final GeckoRuntimeSettings.Builder runtimeSettingsBuilder =
-                    new GeckoRuntimeSettings.Builder();
+        // Create a runtime settings builder
+        final GeckoRuntimeSettings.Builder runtimeSettingsBuilder =
+                new GeckoRuntimeSettings.Builder();
 
-            if (BuildConfig.DEBUG) {
-                // In debug builds, we want to load JavaScript resources fresh with
-                // each build.
-                runtimeSettingsBuilder.arguments(new String[] { "-purgecaches" });
-            }
+        // Manually set display density for Raspberry Pi display
+        runtimeSettingsBuilder.displayDensityOverride(1);
 
-            final Bundle extras = getActivity().getIntent().getExtras();
-            if (extras != null) {
-                runtimeSettingsBuilder.extras(extras);
-            }
-            runtimeSettingsBuilder
-                    .useContentProcessHint(false)
-                    .remoteDebuggingEnabled(true)
-                    .nativeCrashReportingEnabled(true)
-                    .javaCrashReportingEnabled(true)
-                    .crashReportingJobId(1024)
-                    .consoleOutput(true)
-                    .displayDensityOverride(1)
-                    .trackingProtectionCategories(GeckoSession.TrackingProtectionDelegate.CATEGORY_ALL);
-
-            runtime = GeckoRuntime.create(getActivity(), runtimeSettingsBuilder.build());
-        }
-
-        // Attach the GeckoView to a new GeckoSession
         session = new GeckoSession();
+        runtime = GeckoRuntime.create(getActivity(), runtimeSettingsBuilder.build());
         session.open(runtime);
         geckoview.setSession(session);
-
-        // Load a URL
         session.loadUri(HOME_PAGE);
     }
 
