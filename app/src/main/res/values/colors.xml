@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="activeButton">#5dffffff</color>
+    <color name="taskManagerBackground">#ff333333</color>
 </resources>

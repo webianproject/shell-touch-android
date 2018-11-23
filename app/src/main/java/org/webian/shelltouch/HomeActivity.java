@@ -1,15 +1,13 @@
 package org.webian.shelltouch;
 
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.View;
-import org.mozilla.geckoview.GeckoRuntime;
-import org.mozilla.geckoview.GeckoRuntimeSettings;
-import org.mozilla.geckoview.GeckoSession;
-import org.mozilla.geckoview.GeckoView;
 
-import java.io.IOException;
 import java.util.ArrayList;
+
 
 /**
  * Webian Shell Touch.
@@ -19,6 +17,7 @@ public class HomeActivity extends Activity {
     private ShellDatabase database;
     private View mContentView;
     private HomeScreenWindow homeScreenWindow;
+    private TaskManager taskManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,16 +27,35 @@ public class HomeActivity extends Activity {
         ArrayList apps = database.getApps();
         System.out.println("Apps: " + apps);
         mContentView = findViewById(R.id.home_content);
-        homeScreenWindow = (HomeScreenWindow) getFragmentManager().findFragmentById(R.id.homescreen_window);
+
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+        // Create home screen window.
+        homeScreenWindow = new HomeScreenWindow();
+        transaction.add(R.id.windows, homeScreenWindow);
+
+        // Create and hide task manager.
+        taskManager = new TaskManager();
+        transaction.add(R.id.windows, taskManager);
+        transaction.hide(taskManager);
+
+        transaction.commit();
+
+
     }
 
     /**
-     * Navigate to the home page.
+     * Show the home screen.
      *
      * @param view
      */
     public void home(View view) {
-      homeScreenWindow.goHome();
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.hide(taskManager);
+        transaction.show(homeScreenWindow);
+        transaction.commit();
     }
 
     /**
@@ -47,6 +65,19 @@ public class HomeActivity extends Activity {
      */
     public void back(View view) {
         homeScreenWindow.goBack();
+    }
+
+    /**
+     * Show the task manager.
+     *
+     * @param view
+     */
+    public void showTaskManager(View view) {
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.hide(homeScreenWindow);
+        transaction.show(taskManager);
+        transaction.commit();
     }
 
     /**
